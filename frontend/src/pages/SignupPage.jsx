@@ -1,17 +1,15 @@
 import { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function SignupPage() {
-  const { signup, isAuthenticated, loading: authLoading } = useAuth()
+  const { signup, isAuthenticated } = useAuth()
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  if (authLoading) return <LoadingSpinner className="min-h-screen" />
   if (isAuthenticated) return <Navigate to="/dashboard" replace />
 
   const handleSubmit = async (e) => {
@@ -21,7 +19,7 @@ export default function SignupPage() {
     try {
       await signup(email, password, fullName)
     } catch (err) {
-      setError(err.response?.data?.detail || 'Signup failed')
+      setError(err.message || 'Signup failed')
     } finally {
       setLoading(false)
     }
@@ -35,7 +33,7 @@ export default function SignupPage() {
             RF
           </div>
           <h1 className="text-2xl font-bold">Create account</h1>
-          <p className="mt-1 text-sm text-slate-500">Start optimizing your resume locally</p>
+          <p className="mt-1 text-sm text-slate-500">Account stored locally in your browser</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -46,34 +44,15 @@ export default function SignupPage() {
           )}
           <div>
             <label className="label">Full Name</label>
-            <input
-              type="text"
-              className="input"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              required
-            />
+            <input type="text" className="input" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
           </div>
           <div>
             <label className="label">Email</label>
-            <input
-              type="email"
-              className="input"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            <input type="email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div>
             <label className="label">Password</label>
-            <input
-              type="password"
-              className="input"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              minLength={6}
-              required
-            />
+            <input type="password" className="input" value={password} onChange={(e) => setPassword(e.target.value)} minLength={6} required />
           </div>
           <button type="submit" className="btn-primary w-full" disabled={loading}>
             {loading ? 'Creating account...' : 'Create Account'}

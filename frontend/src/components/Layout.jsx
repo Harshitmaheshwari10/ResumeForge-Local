@@ -29,6 +29,9 @@ export default function Layout({ children }) {
             <span className="text-lg font-bold">
               Resume<span className="text-brand-600">Forge</span>
               <span className="ml-1 text-xs font-normal text-slate-500">Local</span>
+            <span className="ml-2 hidden rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 sm:inline">
+              No backend
+            </span>
             </span>
           </Link>
 

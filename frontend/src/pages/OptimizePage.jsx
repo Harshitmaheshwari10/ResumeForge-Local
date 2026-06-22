@@ -11,22 +11,18 @@ export default function OptimizePage() {
   const [resumeText, setResumeText] = useState('')
   const [useText, setUseText] = useState(false)
   const [jobDescription, setJobDescription] = useState('')
-  const [jdFile, setJdFile] = useState(null)
   const [template, setTemplate] = useState('generic')
   const [title, setTitle] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   const handleJdFile = async (file) => {
-    setJdFile(file)
     if (!file) return
-    const form = new FormData()
-    form.append('file', file)
     try {
-      const res = await resumeApi.parseJd(form)
+      const res = await resumeApi.parseJdFile(file)
       setJobDescription(res.data.raw_text)
-    } catch {
-      setError('Failed to parse job description file')
+    } catch (err) {
+      setError(err.message || 'Failed to parse job description file')
     }
   }
 
@@ -38,32 +34,30 @@ export default function OptimizePage() {
     try {
       let res
       if (useText) {
-        const form = new FormData()
-        form.append('resume_text', resumeText)
-        form.append('job_description', jobDescription)
-        form.append('template', template)
-        form.append('save', 'true')
-        form.append('title', title || 'Pasted Resume')
-        res = await resumeApi.analyzeText(form)
+        res = await resumeApi.analyzeText({
+          resumeText,
+          jobDescription,
+          template,
+          title: title || 'Pasted Resume',
+        })
       } else {
         if (!resumeFile) {
           setError('Please upload a resume file')
           setLoading(false)
           return
         }
-        const form = new FormData()
-        form.append('resume', resumeFile)
-        form.append('job_description', jobDescription)
-        form.append('template', template)
-        form.append('save', 'true')
-        form.append('title', title || resumeFile.name.replace(/\.[^.]+$/, ''))
-        res = await resumeApi.analyze(form)
+        res = await resumeApi.analyze({
+          resumeFile,
+          jobDescription,
+          template,
+          title: title || resumeFile.name.replace(/\.[^.]+$/, ''),
+        })
       }
 
       sessionStorage.setItem('lastResult', JSON.stringify(res.data))
       navigate('/results')
     } catch (err) {
-      setError(err.response?.data?.detail || 'Optimization failed. Please try again.')
+      setError(err.message || 'Optimization failed. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -74,19 +68,18 @@ export default function OptimizePage() {
       <div className="mb-8">
         <h1 className="text-2xl font-bold">Optimize Resume</h1>
         <p className="mt-1 text-slate-500">
-          Upload your resume and job description for ATS analysis
+          Everything runs in your browser — no server required
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {error && (
           <div className="rounded-lg bg-red-50 p-4 text-sm text-red-700 dark:bg-red-900/30 dark:text-red-300">
-            {typeof error === 'string' ? error : JSON.stringify(error)}
+            {error}
           </div>
         )}
 
         <div className="grid gap-6 lg:grid-cols-2">
-          {/* Resume Upload */}
           <div className="card space-y-4">
             <h2 className="text-lg font-semibold">Your Resume</h2>
 
@@ -146,12 +139,11 @@ export default function OptimizePage() {
             </div>
           </div>
 
-          {/* Job Description */}
           <div className="card space-y-4">
             <h2 className="text-lg font-semibold">Job Description</h2>
 
             <div>
-              <label className="label">Upload JD (PDF/DOCX) — optional</label>
+              <label className="label">Upload JD (PDF/DOCX/TXT) — optional</label>
               <input
                 type="file"
                 accept=".pdf,.docx,.txt"
@@ -174,7 +166,6 @@ export default function OptimizePage() {
           </div>
         </div>
 
-        {/* Template Selection */}
         <div className="card">
           <h2 className="mb-4 text-lg font-semibold">Resume Template</h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -208,7 +199,7 @@ export default function OptimizePage() {
           <button type="submit" className="btn-primary px-8" disabled={loading}>
             {loading ? (
               <span className="flex items-center gap-2">
-                <LoadingSpinner size="sm" /> Analyzing...
+                <LoadingSpinner size="sm" /> Analyzing locally...
               </span>
             ) : (
               'Analyze & Optimize'

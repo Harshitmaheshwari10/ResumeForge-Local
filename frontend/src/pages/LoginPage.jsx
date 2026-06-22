@@ -4,13 +4,12 @@ import { useAuth } from '../context/AuthContext'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function LoginPage() {
-  const { login, isAuthenticated, loading: authLoading } = useAuth()
+  const { login, isAuthenticated } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  if (authLoading) return <LoadingSpinner className="min-h-screen" />
   if (isAuthenticated) return <Navigate to="/dashboard" replace />
 
   const handleSubmit = async (e) => {
@@ -20,7 +19,7 @@ export default function LoginPage() {
     try {
       await login(email, password)
     } catch (err) {
-      setError(err.response?.data?.detail || 'Login failed')
+      setError(err.message || 'Login failed')
     } finally {
       setLoading(false)
     }
@@ -34,7 +33,7 @@ export default function LoginPage() {
             RF
           </div>
           <h1 className="text-2xl font-bold">Welcome back</h1>
-          <p className="mt-1 text-sm text-slate-500">Sign in to ResumeForge Local</p>
+          <p className="mt-1 text-sm text-slate-500">100% local — data stays in your browser</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -45,23 +44,11 @@ export default function LoginPage() {
           )}
           <div>
             <label className="label">Email</label>
-            <input
-              type="email"
-              className="input"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            <input type="email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div>
             <label className="label">Password</label>
-            <input
-              type="password"
-              className="input"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <input type="password" className="input" value={password} onChange={(e) => setPassword(e.target.value)} required />
           </div>
           <button type="submit" className="btn-primary w-full" disabled={loading}>
             {loading ? 'Signing in...' : 'Sign In'}
@@ -69,7 +56,7 @@ export default function LoginPage() {
         </form>
 
         <p className="mt-6 text-center text-sm text-slate-500">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Link to="/signup" className="font-medium text-brand-600 hover:text-brand-700">
             Sign up
           </Link>

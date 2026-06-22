@@ -16,10 +16,12 @@ function ResultsView({ result }) {
   const handleExport = async (fmt) => {
     setExporting(fmt)
     try {
-      const res = fmt === 'pdf' ? await exportApi.pdf(result.optimized_text) : await exportApi.docx(result.optimized_text)
+      const res = fmt === 'pdf'
+        ? await exportApi.pdf(result.optimized_text)
+        : await exportApi.docx(result.optimized_text)
       downloadBlob(res.data, `optimized_resume.${fmt}`)
-    } catch {
-      alert('Export failed')
+    } catch (err) {
+      alert(err.message || 'Export failed')
     } finally {
       setExporting('')
     }

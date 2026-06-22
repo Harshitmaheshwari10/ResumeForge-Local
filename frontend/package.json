@@ -1,7 +1,7 @@
 {
-  "name": "resumeforge-local-frontend",
+  "name": "resumeforge-local",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,8 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "axios": "^1.7.9",
     "chart.js": "^4.4.7",
+    "docx": "^9.2.0",
+    "jspdf": "^2.5.2",
+    "mammoth": "^1.9.0",
+    "pdfjs-dist": "^4.10.38",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^18.3.1",
