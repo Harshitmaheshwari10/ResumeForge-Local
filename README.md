@@ -60,18 +60,6 @@ ResumeForge-Local/
     └── package.json
 ```
 
-The `backend/` folder is **legacy** from an earlier version and is no longer required.
-
----
-
-## Data & Privacy
-
-- Accounts and resume history are stored in your browser's **localStorage**
-- Nothing is sent to any server
-- Clearing browser data will remove your account and history
-
----
-
 ## Tech Stack
 
 | Layer | Technology |
