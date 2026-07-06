@@ -8,7 +8,7 @@ Upload a resume, paste a job description, get ATS scores, keyword analysis, skil
 
 ## Quick Start
 
-```bash
+```bas
 cd frontend
 npm install
 npm run dev
