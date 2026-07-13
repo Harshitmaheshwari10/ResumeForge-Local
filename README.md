@@ -72,7 +72,3 @@ ResumeForge-Local/
 | Storage | localStorage |
 
 ---
-
-## License
-
-MIT
