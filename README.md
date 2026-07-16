@@ -16,8 +16,6 @@ npm run dev
 
 Open **http://localhost:5173**
 
-That's it. No backend to start.
-
 ---
 
 ## Features
@@ -33,10 +31,6 @@ That's it. No backend to start.
 - Dark / light mode
 
 ---
-
-## Deploy to Vercel
-
-Because there is **no backend**, the frontend can be deployed to Vercel:
 
 ```bash
 cd frontend
